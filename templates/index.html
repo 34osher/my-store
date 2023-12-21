@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Product Catalog</title>
+</head>
+<body>
+    <h1>Products</h1>
+    <ul>
+        {% for product in products %}
+        <li>{{ product.name }} - ${{ product.price }}
+            <form action="/buy" method="post">
+                <input type="hidden" name="product_id" value="{{ product._id }}">
+                <button type="submit">Buy</button>
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+</body>
+</html>

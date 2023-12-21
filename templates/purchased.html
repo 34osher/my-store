@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Purchased Items</title>
+</head>
+<body>
+    <h1>Purchased Items</h1>
+    <ul>
+        {% for item in items %}
+        <li>{{ item.product_id }} - Purchased at {{ item.timestamp }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
