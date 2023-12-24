@@ -1,15 +1,8 @@
-"""
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, redirect, url_for, jsonify
 from pymongo import MongoClient
 from kafka import KafkaProducer, KafkaConsumer
 import json
-"""
-from flask import Flask, render_template, request, redirect, url_for
-from flask_pymongo import PyMongo
-from flask_wtf import FlaskForm
-from wtforms import StringField, FileField, SubmitField
-from werkzeug.utils import secure_filename
-import os
+
 app = Flask(__name__)
 
 # Kafka setup
@@ -29,14 +22,27 @@ purchases_col = db['purchases']
 
 @app.route('/')
 def index():
-    products = products_col.find()
+    products = list(products_col.find())
     return render_template('index.html', products=products)
+
+
+@app.route('/admin/add_product', methods=['GET', 'POST'])
+def add_product():
+    if request.method == 'POST':
+        name = request.form.get('name')
+        price = request.form.get('price')
+        image_url = request.form.get('image_url')
+
+        products_col.insert_one({'name': name, 'price': price, 'image_url': image_url})
+
+        return redirect(url_for('index'))
+
+    return render_template('add_product.html')
 
 
 @app.route('/buy', methods=['POST'])
 def buy():
     product_id = request.form.get('product_id')
-    # Produce a message to Kafka
     producer.send('purchases', {'product_id': product_id})
     return jsonify({'status': 'success'})
 
