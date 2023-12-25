@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <meta charset="UTF-8">
     <title>Product Catalog</title>
 </head>
@@ -19,5 +20,8 @@
         {% endfor %}
     </ul>
     <a href="/admin/add_product">Add Product</a>
+    <a href="/purchased">View Purchased Items</a>
+    <a href="/logout">Logout</a>
 </body>
 </html>
+

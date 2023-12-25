@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <meta charset="UTF-8">
+    <title>Admin Panel</title>
+</head>
+<body>
+    <h1>Admin Panel</h1>
+    <a href="/admin/add_product">Add New Product</a>
+
+    <h2>Current Products</h2>
+    <ul>
+        {% for product in products %}
+        <li>
+            {{ product.name }} - ${{ product.price }}
+            <!-- Add a button or link for removing product -->
+            <form action="/admin/remove_product" method="post">
+                <input type="hidden" name="product_id" value="{{ product._id }}">
+                <button type="submit">Remove</button>
+            </form>
+        </li>
+        {% endfor %}
+        <form action="/admin" method="post">
+            <input type="hidden" name="add_product" value="true">
+            <input type="text" name="name" placeholder="Product Name" required>
+            <input type="text" name="price" placeholder="Price" required>
+            <input type="text" name="image_url" placeholder="Image URL">
+            <button type="submit">Add Product</button>
+        </form>
+    </ul>
+    <ul>
+        {% for product in products %}
+        <li>
+            {{ product.name }} - ${{ product.price }}
+            <form action="/admin" method="post">
+                <input type="hidden" name="remove_product" value="true">
+                <input type="hidden" name="product_id" value="{{ product._id }}">
+                <button type="submit">Remove</button>
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+    <a href="/logout">Logout</a>
+</body>
+</html>

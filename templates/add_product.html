@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
     <meta charset="UTF-8">
     <title>Add Product</title>
 </head>
@@ -9,13 +10,10 @@
     <form action="/admin/add_product" method="post">
         <label for="name">Product Name:</label>
         <input type="text" id="name" name="name" required><br><br>
-
         <label for="price">Price:</label>
         <input type="text" id="price" name="price" required><br><br>
-
         <label for="image_url">Image URL:</label>
         <input type="text" id="image_url" name="image_url"><br><br>
-
         <input type="submit" value="Add Product">
     </form>
 </body>

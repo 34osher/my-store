@@ -1,0 +1,14 @@
+# Use an official Python runtime as a base image
+FROM python:3.8-slim
+
+# Set the working directory in the container
+WORKDIR /usr/src/app
+
+# Copy only the kafka_consumer.py script
+COPY kafka_consumer.py .
+
+# Install Kafka Python package
+RUN pip install kafka-python pymongo
+
+# Run kafka_consumer.py when the container launches
+CMD ["python", "kafka_consumer.py"]
