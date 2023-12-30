@@ -37,6 +37,20 @@ login_manager.login_view = 'login'
 def load_user(user_id):
     return User.find_by_id(user_id)
 
+@app.route('/create_admin')
+def create_admin():
+    email = "admin@example.com"
+    password = "987654"
+
+    existing_user = User.find_by_email(email)
+    if existing_user:
+        return "Admin user already exists."
+
+    admin_user = User(email=email, is_admin=True)
+    admin_user.set_password(password)
+    admin_user.save_to_db()
+
+    return "Admin user created."
 
 @app.route('/')
 def index():
@@ -52,18 +66,18 @@ def index():
     # return render_template('index.html', products=products)
 
 
-@app.route('/admin/add_product', methods=['GET', 'POST'])
-def add_product():
-    if request.method == 'POST':
-        name = request.form.get('name')
-        price = request.form.get('price')
-        image_url = request.form.get('image_url')
+# @app.route('/admin/add_product', methods=['GET', 'POST'])
+# def add_product():
+#     if request.method == 'POST':
+#         name = request.form.get('name')
+#         price = request.form.get('price')
+#         image_url = request.form.get('image_url')
 
-        products_col.insert_one({'name': name, 'price': price, 'image_url': image_url})
+#         products_col.insert_one({'name': name, 'price': price, 'image_url': image_url})
 
-        return redirect(url_for('index'))
+#         return redirect(url_for('index'))
 
-    return render_template('add_product.html')
+#     return render_template('add_product.html')
 
 
 @app.route('/buy', methods=['POST'])
@@ -89,7 +103,12 @@ def login():
         user = User.find_by_email(form.email.data)
         if user and user.check_password(form.password.data):
             login_user(user)
-            return redirect(url_for('index'))
+            print("User authenticated:", current_user.is_authenticated)  # Debug print
+            if user.is_admin:
+                return redirect(url_for('admin'))  # Redirect admin to admin page
+            else:
+                return redirect(url_for('index'))  # Redirect regular user to homepage
+
         else:
             error = "Invalid email or password."
     return render_template('login.html', form=form, error=error)
@@ -101,14 +120,15 @@ def register():
     form = RegisterForm()
     if form.validate_on_submit():
         # Logic to handle registration
-        # For example, create a new User, set password, and save to MongoDB
         user = User(email=form.email.data)
         user.set_password(form.password.data)  # Hash the password
         user.save_to_db()  # Save the user to the MongoDB
 
         # After registration, you might want to log the user in or redirect to the login page
-        # login_user(user)
-        return redirect(url_for('login'))
+        login_user(user)
+        print("User authenticated:", current_user.is_authenticated)  # Debug print
+
+        return redirect(url_for('layout'))
 
     return render_template('register.html', form=form)
 

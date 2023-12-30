@@ -1,4 +1,6 @@
 <!DOCTYPE html>
+{% extends "layout.html" %}
+{% block content %}
 <html lang="en">
 <head>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
@@ -18,3 +20,4 @@
     </form>
 </body>
 </html>
+{% endblock %}
