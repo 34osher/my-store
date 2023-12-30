@@ -1,2 +1,3 @@
 # my-store
-learn how to make a simple store (im devops engineer)
+learn how to make a simple store (im devops engineer) 
+test git
